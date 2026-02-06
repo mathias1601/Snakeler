@@ -1,0 +1,26 @@
+import pygame
+import random
+
+# ------ CONSTANTS ------
+
+# Colors
+WHITE = (255, 255, 255)
+BLUE = (0, 0, 255)
+RED = (255, 0, 0)
+YELLOW = (255, 255, 0)
+GREEN = (0, 255, 0)
+BLACK = (0, 0, 0)
+
+# ------ GAME OPTIONS ------
+
+WIDTH, HEIGHT = 1080, 720
+FRAMERATE = 60
+
+FONT_SIZE = 36
+FONT_COLOR = WHITE
+
+PLAYER_SPEED = 500
+BULLET_SPEED = 700
+BOULDER_SPAWN_INTERVAL_MS = 1500
+BULLET_COOLDOWN_MS = 300
+LIVES = 3
