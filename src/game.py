@@ -24,7 +24,7 @@ def run():
     # Game objects
     p1 = Player()
     projectiles = []
-    cut_grass = []
+    cut_grass = set()
 
     score = 0
 
@@ -35,6 +35,10 @@ def run():
         for projectile in projectiles:
             projectile.update(dt)
             projectile.draw(screen)
+
+        # Update grass
+        for cut_grass_position in cut_grass:
+            pygame.draw.rect(screen, DARK_GREEN, pygame.Rect(cut_grass_position[0], cut_grass_position[1], 10, 10))
             
         # Draw score and lives
         score_text = FONT_TYPE.render(f'Score: {score}', False, FONT_COLOR)
@@ -58,24 +62,20 @@ def run():
             if event.type == pygame.QUIT:
                 running = False
 
+        lastX = p1.x
+        lastY = p1.y
+
         if direction == "RIGHT":
-            lastX = p1.x
             p1.x -= p1.speed * dt
-            cut_grass.append([lastX, p1.y])
         if direction == "LEFT":
-            lastX = p1.x
             p1.x += p1.speed * dt
-            cut_grass.append([lastX, p1.y])
         if direction == "UP":
-            lastY = p1.y
             p1.y -= p1.speed * dt
-            cut_grass.append([p1.x, lastY])
         if direction == "DOWN":
-            lastY = p1.y
             p1.y += p1.speed * dt
-            cut_grass.append([p1.x, lastY])
-
-
+        
+        cut_grass.add((lastX, lastY))
+            
         # Get key presses
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a]:
