@@ -1,8 +1,4 @@
-> Dette er en pygame boilerplate
->
-> Dere kan tenke på dette som kodeskjelettet eller prekoden for pygame
-
-# Navn på spillet
+# Snakeler
 
 Lagd under IFI Game Jam 2026
 
@@ -10,10 +6,12 @@ Lagd under IFI Game Jam 2026
 
 Gruppemedlemmer:
 
-- 
-- 
-- 
+- Ka Thas 
+- Mathias Knudsen
+- Selen Goktay
 
 ## Controls
+
+WASD
 
 ## Beskrivelse av spillet
