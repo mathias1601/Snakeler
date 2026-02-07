@@ -6,25 +6,30 @@ from .options import *
 
 
 def run(screen):
-    from .assets import BACKGROUND_IMAGE, FONT_TYPE
+    from .assets import BACKGROUND_IMAGE, FONT_TYPE, SOUNDTRACK
     from .Player import Player
     from .Projectile import Projectile
 
-    pygame.display.set_caption("Boulder Game")
+    pygame.display.set_caption("Snakeler")
 
     # Clock and timing
     clock = pygame.time.Clock()
     dt = 0
+
+    pygame.mixer.music.load(SOUNDTRACK)
+    pygame.mixer.music.play(-1)  # Loop the soundtrack indefinitely
 
     # Game objects
     p1 = Player()
     projectiles = []
     cut_grass = set()
 
-    
-
     score = 0
 
+    direction = pygame.Vector2(0, -1)
+    last_move_pos = (p1.x, p1.y)
+
+    # function to draw everything
     def draw_frame():
         screen.blit(BACKGROUND_IMAGE, (0, 0))
         pygame.draw.rect(screen, GREEN, (0, 0, WIDTH, HEIGHT))  # Ground
@@ -36,24 +41,25 @@ def run(screen):
         for cut_grass_position in cut_grass:
             pygame.draw.rect(screen, DARK_GREEN, pygame.Rect(cut_grass_position[0], cut_grass_position[1], 64, 64))
             # TODO Cut grass texture
-
-        p1.draw(screen)
         
+        p1.draw(direction, screen)
 
-        # Draw score and lives
-        score_text = FONT_TYPE.render(f'Score: {score}', False, FONT_COLOR)
-        lives_text = FONT_TYPE.render(f"♥"*p1.lives, True, FONT_COLOR)
-        screen.blit(score_text, (10, 10))
-        screen.blit(lives_text, (WIDTH - 120, 10))
+        # hp bar
+        hp_bar_width = 200
+        hp_bar_height = 20
+        hp_bar_x = 10
+        hp_bar_y = 10
+        hp_ratio = p1.hp / HP
+        pygame.draw.rect(screen, RED, (hp_bar_x, hp_bar_y, hp_bar_width, hp_bar_height))
+        pygame.draw.rect(screen, GREEN, (hp_bar_x, hp_bar_y, hp_bar_width * hp_ratio, hp_bar_height))
 
         pygame.display.flip()
 
+
+
+
     # Game loop
     running = True
-
-    direction = pygame.Vector2(0, -1)
-    last_move_pos = (p1.x, p1.y)
-
     while running:
         dt = clock.tick(FRAMERATE) / 1000
         current_time = pygame.time.get_ticks()
@@ -63,6 +69,8 @@ def run(screen):
             if event.type == pygame.QUIT:
                 running = False
 
+
+        # -----| Movement |-----
         lastX = p1.x
         lastY = p1.y
             
@@ -78,19 +86,35 @@ def run(screen):
         if keys[pygame.K_s]:
             input_dir.y += 1
 
+        # Normalize move
         if input_dir.length_squared() > 0:
             input_dir = input_dir.normalize()
             direction = input_dir
 
+        # Move player
         p1.x += direction.x * p1.speed * dt
         p1.y += direction.y * p1.speed * dt
 
+        # Keep in bounds
         p1.x = max(0, min(WIDTH - p1.size[0], p1.x))
         p1.y = max(0, min(HEIGHT - p1.size[1], p1.y))
 
         if (p1.x, p1.y) != last_move_pos:
             cut_grass.add((lastX, lastY))
             last_move_pos = (p1.x, p1.y)
+
+
+        # -----| Collisions |-----
+        # damage proportional to overlap with cut grass
+        for cut_grass_position in cut_grass:
+            grass_rect = pygame.Rect(cut_grass_position[0], cut_grass_position[1], 64, 64)
+            player_rect = pygame.Rect(p1.x, p1.y, p1.size[0], p1.size[1])
+            if grass_rect.colliderect(player_rect):
+                overlap_area = grass_rect.clip(player_rect).width * grass_rect.clip(player_rect).height
+                damage = overlap_area / (p1.size[0] * p1.size[1]) * 20 * dt  # Max 20 damage per second
+                p1.hp -= damage
+                """ if p1.hp <= 0:
+                    running = False """
 
 
         # Update display

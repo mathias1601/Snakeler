@@ -12,13 +12,14 @@ class Player:
         self.color = BLUE
         self.image = pygame.transform.scale(ROCKET_IMAGE, self.size)
         self.speed = PLAYER_SPEED
-        self.last_shot_time = 0
 
-        self.life = LIFE
+        self.hp = HP
 
-    def shoot(self):
-        projectile = Projectile(self.x + self.size[0] // 2, self.y)
-        return projectile
+    def draw(self, direction, screen):
 
-    def draw(self, screen):
-        screen.blit(self.image, (self.x, self.y))
+        # Rotate the image based on the direction
+        angle = direction.angle_to(pygame.Vector2(0, -1))
+        rotated_image = pygame.transform.rotate(self.image, angle)
+        rotated_rect = rotated_image.get_rect(center=(self.x + self.size[0] // 2, self.y + self.size[1] // 2))
+        screen.blit(rotated_image, rotated_rect)
+
