@@ -14,7 +14,7 @@ class Player:
         self.speed = PLAYER_SPEED
         self.last_shot_time = 0
 
-        self.lives = LIVES
+        self.life = LIFE
 
     def shoot(self):
         projectile = Projectile(self.x + self.size[0] // 2, self.y)

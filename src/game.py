@@ -1,30 +1,27 @@
 """ Hovedprogrammet som skal kjøres """
+import sys
 import pygame
+
 from .options import *
 
-# Init
-pygame.init()
-screen = pygame.display.set_mode((WIDTH, HEIGHT)) # needed here by assets.py
 
-import sys, random, time, os
+def run(screen):
+    from .assets import BACKGROUND_IMAGE, FONT_TYPE
+    from .Player import Player
+    from .Projectile import Projectile
 
-from .assets import *
-from .Player import Player
-from .Projectile import Projectile
-
-
-def run():
     pygame.display.set_caption("Boulder Game")
 
     # Clock and timing
     clock = pygame.time.Clock()
     dt = 0
-    last_boulder_spawn_time = 0
 
     # Game objects
     p1 = Player()
     projectiles = []
     cut_grass = set()
+
+    
 
     score = 0
 
@@ -41,7 +38,7 @@ def run():
             
         p1.draw(screen)
         
-        
+
         # Draw score and lives
         score_text = FONT_TYPE.render(f'Score: {score}', False, FONT_COLOR)
         lives_text = FONT_TYPE.render(f"♥"*p1.lives, True, FONT_COLOR)
@@ -108,4 +105,6 @@ def run():
 
 
 if __name__ == "__main__":
-    run()
+    pygame.init()
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    run(screen)
