@@ -9,7 +9,8 @@ class Projectile:
         self.color = GREEN
         self.rect = pygame.Rect(self.x, self.y, self.size[0], self.size[1])
 
-    def update(self, dt):
+    def update(self, dt, lawnmower_x, lawnmower_y):
+        vector = (lawnmower_x - self.x, lawnmower_y - self.y)
         self.y -= self.speed * dt
         if self.y < 0:
             self.y = 0  # Prevent going off-screen
