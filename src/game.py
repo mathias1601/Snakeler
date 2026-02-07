@@ -34,7 +34,9 @@ def run(screen):
 
     # function to draw everything
     def draw_frame():
-        garden.draw(screen)
+
+        screen.blit(BACKGROUND_IMAGE, (0, 0))
+        
 
         for projectile in projectiles:
             projectile.update(dt)
@@ -59,10 +61,9 @@ def run(screen):
         pygame.display.flip()
 
 
-
-
     # Game loop
     running = True
+
     while running:
         dt = clock.tick(FRAMERATE) / 1000
         current_time = pygame.time.get_ticks()
