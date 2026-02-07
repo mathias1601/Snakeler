@@ -12,10 +12,7 @@ class Garden():
         self.diff = 30
         self.rowgrid = 1200 
         self.colgrid = 660 
-        self.grass_image = pygame.transform.scale(pygame.image.load(GRASS_IMAGE).convert_alpha(),
-                                                  self.size)
-        self.hurdle_image = pygame.transform.scale(pygame.image.load(HURDLE_IMAGE).convert_alpha(),
-                                                  self.size)
+        self.hurdle_image = HURDLE_IMAGE
 
         self.last_enemy = []
         self.hurdles = self._generate_hurdles()
