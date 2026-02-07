@@ -50,8 +50,8 @@ def run(screen):
         hp_bar_x = 10
         hp_bar_y = 10
         hp_ratio = p1.hp / HP
-        pygame.draw.rect(screen, RED, (hp_bar_x, hp_bar_y, hp_bar_width, hp_bar_height))
-        pygame.draw.rect(screen, GREEN, (hp_bar_x, hp_bar_y, hp_bar_width * hp_ratio, hp_bar_height))
+        pygame.draw.rect(screen, BLACK, (hp_bar_x, hp_bar_y, hp_bar_width, hp_bar_height))
+        pygame.draw.rect(screen, PINK, (hp_bar_x, hp_bar_y, hp_bar_width * hp_ratio, hp_bar_height))
 
         pygame.display.flip()
 
@@ -100,27 +100,40 @@ def run(screen):
         p1.y = max(0, min(HEIGHT - p1.size[1], p1.y))
 
         if (p1.x, p1.y) != last_move_pos:
-            cut_grass.add((lastX, lastY))
+            cut_grass.add((lastX, lastY, current_time))
             last_move_pos = (p1.x, p1.y)
 
 
         # -----| Collisions |-----
         # damage proportional to overlap with cut grass
+        old_cut_grass = set()
+
         for cut_grass_position in cut_grass:
-            grass_rect = pygame.Rect(cut_grass_position[0], cut_grass_position[1], 64, 64)
+            # Remove old cut grass
+            if current_time - cut_grass_position[2] > 5000:  # Grass regrows after 5 seconds
+                old_cut_grass.add(cut_grass_position)
+                continue
+            if current_time - cut_grass_position[2] < 300:  # skip damage for 1 second after cutting
+                continue
+
+            grass_rect = pygame.Rect(cut_grass_position[0], cut_grass_position[1], TILE_SIZE, TILE_SIZE)
             player_rect = pygame.Rect(p1.x, p1.y, p1.size[0], p1.size[1])
             if grass_rect.colliderect(player_rect):
                 overlap_area = grass_rect.clip(player_rect).width * grass_rect.clip(player_rect).height
                 damage = overlap_area / (p1.size[0] * p1.size[1]) * 20 * dt  # Max 20 damage per second
                 p1.hp -= damage
-                """ if p1.hp <= 0:
-                    running = False """
+                if p1.hp <= 0:
+                    running = False
+
+        for cut_grass_position in old_cut_grass:
+            cut_grass.remove(cut_grass_position)
 
 
         # Update display
         draw_frame()
 
     # Clean up
+    pygame.time.wait(2000)  # Wait for 2 seconds before quitting
     pygame.quit()
     sys.exit()
 
