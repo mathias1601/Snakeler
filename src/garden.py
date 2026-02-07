@@ -87,12 +87,8 @@ class Garden():
             for x, elem in enumerate(row):
                 cell = pygame.Rect(x,y,1,1)
                 proj = self.transform(cell)
-                if elem == 1: 
-                    screen.blit(self.grass_image, proj)
-                elif elem == 0: 
+                if elem == 0: 
                     screen.blit(self.hurdle_image, proj)
-                else: 
-                    screen.blit(self.grass_image, proj)
 
 # def run(): #testbenk fra GPT
 #     pygame.init()
