@@ -31,15 +31,17 @@ def run():
     def draw_frame():
         screen.blit(BACKGROUND_IMAGE, (0, 0))
         pygame.draw.rect(screen, GREEN, (0, 0, WIDTH, HEIGHT))  # Ground
-        p1.draw(screen)
         for projectile in projectiles:
             projectile.update(dt)
             projectile.draw(screen)
 
         # Update grass
         for cut_grass_position in cut_grass:
-            pygame.draw.rect(screen, DARK_GREEN, pygame.Rect(cut_grass_position[0], cut_grass_position[1], 10, 10))
+            pygame.draw.rect(screen, DARK_GREEN, pygame.Rect(cut_grass_position[0], cut_grass_position[1], 64, 64))
             
+        p1.draw(screen)
+        
+        
         # Draw score and lives
         score_text = FONT_TYPE.render(f'Score: {score}', False, FONT_COLOR)
         lives_text = FONT_TYPE.render(f"♥"*p1.lives, True, FONT_COLOR)
@@ -51,10 +53,11 @@ def run():
     # Game loop
     running = True
 
-    direction = None
+    direction = pygame.Vector2(0, -1)
+    last_move_pos = (p1.x, p1.y)
 
     while running:
-        clock.tick(FRAMERATE)  # Limit frame rate
+        dt = clock.tick(FRAMERATE) / 1000
         current_time = pygame.time.get_ticks()
 
         # Handle events
@@ -64,28 +67,32 @@ def run():
 
         lastX = p1.x
         lastY = p1.y
-
-        if direction == "RIGHT":
-            p1.x -= p1.speed * dt
-        if direction == "LEFT":
-            p1.x += p1.speed * dt
-        if direction == "UP":
-            p1.y -= p1.speed * dt
-        if direction == "DOWN":
-            p1.y += p1.speed * dt
-        
-        cut_grass.add((lastX, lastY))
             
         # Get key presses
         keys = pygame.key.get_pressed()
+        input_dir = pygame.Vector2(0, 0)
         if keys[pygame.K_a]:
-            direction = "RIGHT"
+            input_dir.x -= 1
         if keys[pygame.K_d]:
-            direction = "LEFT"
+            input_dir.x += 1
         if keys[pygame.K_w]:
-            direction = "UP"
+            input_dir.y -= 1
         if keys[pygame.K_s]:
-            direction = "DOWN"
+            input_dir.y += 1
+
+        if input_dir.length_squared() > 0:
+            input_dir = input_dir.normalize()
+            direction = input_dir
+
+        p1.x += direction.x * p1.speed * dt
+        p1.y += direction.y * p1.speed * dt
+
+        p1.x = max(0, min(WIDTH - p1.size[0], p1.x))
+        p1.y = max(0, min(HEIGHT - p1.size[1], p1.y))
+
+        if (p1.x, p1.y) != last_move_pos:
+            cut_grass.add((lastX, lastY))
+            last_move_pos = (p1.x, p1.y)
         if keys[pygame.K_SPACE]:
             if current_time - p1.last_shot_time >= BULLET_COOLDOWN_MS:
                 p1.last_shot_time = current_time
@@ -94,8 +101,6 @@ def run():
 
         # Update display
         draw_frame()
-
-        dt = clock.tick(60) / 1000
 
     # Clean up
     pygame.quit()
