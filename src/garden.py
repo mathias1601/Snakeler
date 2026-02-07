@@ -32,7 +32,7 @@ class Garden():
                 hurdles.append(hurdle)
         return hurdles
         
-    def generate_enemies(self): #should have its own class, adjust difficulty by number/strength of enemies; max 3 levels
+    def generate_enemy(self): 
         update = 0
         while(not update):
             posx = random.randint(0, self.rowgrid//self.grid  - 1)
@@ -44,7 +44,7 @@ class Garden():
                     self.last_enemy.append(lil_enemy)
                     continue
                 self.last_enemy[0] = lil_enemy
-        return True
+        return lil_enemy
     
     def add_enemy(self): #button press to avoid enemy attack? ... don't use before enemy is made
         x, y = self.last_enemy[0].left, self.last_enemy[0].top 
