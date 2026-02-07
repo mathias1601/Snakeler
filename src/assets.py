@@ -1,11 +1,12 @@
 import pygame
+from os import path
 
 from .options import *
 
 
-BACKGROUND_IMAGE = pygame.image.load('./assets/stars.jpg').convert()
-ROCKET_IMAGE = pygame.image.load('./assets/rocket.png').convert_alpha()
-BOULDER_IMAGE = pygame.image.load('./assets/boulder.png').convert_alpha()
+BACKGROUND_IMAGE = pygame.image.load(path.join('assets', 'stars.jpg')).convert()
+ROCKET_IMAGE = pygame.image.load(path.join('assets', 'rocket.png')).convert_alpha()
+BOULDER_IMAGE = pygame.image.load(path.join('assets', 'boulder.png')).convert_alpha()
 
 # Font
-FONT_TYPE = pygame.font.Font('./assets/dpcomic.ttf', FONT_SIZE)
+FONT_TYPE = pygame.font.Font(path.join('assets', 'dpcomic.ttf'), FONT_SIZE)

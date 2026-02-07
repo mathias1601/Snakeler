@@ -35,7 +35,8 @@ def run(screen):
         # Update grass
         for cut_grass_position in cut_grass:
             pygame.draw.rect(screen, DARK_GREEN, pygame.Rect(cut_grass_position[0], cut_grass_position[1], 64, 64))
-            
+            # TODO Cut grass texture
+
         p1.draw(screen)
         
 
@@ -90,11 +91,7 @@ def run(screen):
         if (p1.x, p1.y) != last_move_pos:
             cut_grass.add((lastX, lastY))
             last_move_pos = (p1.x, p1.y)
-        if keys[pygame.K_SPACE]:
-            if current_time - p1.last_shot_time >= BULLET_COOLDOWN_MS:
-                p1.last_shot_time = current_time
-                projectile = p1.shoot()
-                projectiles.append(projectile)
+
 
         # Update display
         draw_frame()
