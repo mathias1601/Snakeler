@@ -8,6 +8,7 @@ from .options import *
 def run(screen):
     from .assets import BACKGROUND_IMAGE, FONT_TYPE, SOUNDTRACK
     from .Player import Player
+    from .Garden import Garden
     from .Projectile import Projectile
 
     pygame.display.set_caption("Snakeler")
@@ -20,6 +21,8 @@ def run(screen):
     pygame.mixer.music.play(-1)  # Loop the soundtrack indefinitely
 
     # Game objects
+    garden = Garden()
+
     p1 = Player()
     projectiles = []
     cut_grass = set()
@@ -31,8 +34,8 @@ def run(screen):
 
     # function to draw everything
     def draw_frame():
-        screen.blit(BACKGROUND_IMAGE, (0, 0))
-        pygame.draw.rect(screen, GREEN, (0, 0, WIDTH, HEIGHT))  # Ground
+        garden.draw(screen)
+
         for projectile in projectiles:
             projectile.update(dt)
             projectile.draw(screen)

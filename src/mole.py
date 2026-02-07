@@ -1,7 +1,7 @@
 import pygame
 import random
 from Projectile import Projectile
-from garden import Garden
+from Garden import Garden
 
 #SNEILESKOOOOOOO
 class Mole():
