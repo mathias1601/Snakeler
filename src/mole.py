@@ -20,7 +20,8 @@ class Mole():
                                                   self.size)
         self.projectile = []
 
-    def _throw_projectile(self):
+    def _throw_projectile(self, lawnmower_x, lawnmower_y):
+        distance = (lawnmower_x - self.x, lawnmower_y - self.y)
         x = self.rect.centerx
         y = self.rect.top
         snailshoe = Projectile(x,y)
