@@ -13,7 +13,7 @@ def main():
     start_game = menu.run()
 
     if start_game:
-        run(screen)
+        run(screen) # game.py
     else:
         pygame.quit()
 

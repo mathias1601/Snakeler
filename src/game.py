@@ -36,7 +36,7 @@ def run(screen):
     def draw_frame():
 
         screen.blit(BACKGROUND_IMAGE, (0, 0))
-        
+
 
         for projectile in projectiles:
             projectile.update(dt)
@@ -128,6 +128,8 @@ def run(screen):
                 p1.hp -= damage
                 if p1.hp <= 0:
                     running = False
+                    # main menu
+
 
         for cut_grass_position in old_cut_grass:
             cut_grass.remove(cut_grass_position)
